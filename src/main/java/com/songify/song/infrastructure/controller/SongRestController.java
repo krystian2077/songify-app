@@ -3,7 +3,8 @@ package com.songify.song.infrastructure.controller;
 import com.songify.song.domain.model.Song;
 import com.songify.song.domain.model.SongNotFoundException;
 import com.songify.song.domain.service.SongAdder;
-import com.songify.song.domain.service.SongRetreiver;
+import com.songify.song.domain.service.SongDeleter;
+import com.songify.song.domain.service.SongRetriever;
 import com.songify.song.infrastructure.controller.dto.request.CreateSongRequestDto;
 import com.songify.song.infrastructure.controller.dto.request.PartiallyUpdateSongRequestDto;
 import com.songify.song.infrastructure.controller.dto.request.UpdateSongRequestDto;
@@ -21,18 +22,20 @@ import java.util.List;
 public class SongRestController {
 
     private final SongAdder songAdder;
-    private final SongRetreiver songRetreiver;
+    private final SongRetriever songRetriever;
+    private final SongDeleter songDeleter;
 
-    SongRestController(SongAdder songAdder, SongRetreiver songRetriever) {
+    SongRestController(SongAdder songAdder, SongRetriever songRetriever, SongDeleter songDeleter) {
         this.songAdder = songAdder;
-        this.songRetreiver = songRetriever;
+        this.songRetriever = songRetriever;
+        this.songDeleter = songDeleter;
     }
 
     @GetMapping
     public ResponseEntity<GetAllSongsResponseDto> getAllSongs(@RequestParam(required = false) Integer limit) {
-        List<Song> allSongs = songRetreiver.findAll();
+        List<Song> allSongs = songRetriever.findAll();
         if (limit != null) {
-            List<Song> limitedMap = songRetreiver.findAllLimitedBy(limit);
+            List<Song> limitedMap = songRetriever.findAllLimitedBy(limit);
             GetAllSongsResponseDto response = new GetAllSongsResponseDto(limitedMap);
             return ResponseEntity.ok(response);
         }
@@ -41,13 +44,12 @@ public class SongRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetSongResponseDto> getSongById(@PathVariable Integer id, @RequestHeader(required = false) String requestId) {
+    public ResponseEntity<GetSongResponseDto> getSongById(@PathVariable Long id,
+                                                          @RequestHeader(required = false) String requestId) {
         log.info(requestId);
-        List<Song> allSongs = songRetreiver.findAll();
-        if (!allSongs.contains(id)) {
-            throw new SongNotFoundException("Song with id " + id + " not found");
-        }
-        Song song = allSongs.get(id);
+        Song song = songRetriever.findSongById(id)
+                .orElseThrow(() -> new SongNotFoundException("Song with id " + id + " not found"));
+
         GetSongResponseDto response = SongMapper.mapFromSongToGetSongResponseDto(song);
         return ResponseEntity.ok(response);
     }
@@ -61,12 +63,10 @@ public class SongRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<DeleteSongResponseDto> deleteSongByIdUsingPathVariable(@PathVariable Integer id) {
-        List<Song> allSongs = songRetreiver.findAll();
-        if (!allSongs.contains(id)) {
-            throw new SongNotFoundException("Song with id " + id + " not found");
-        }
-        allSongs.remove(id);
+    public ResponseEntity<DeleteSongResponseDto> deleteSongByIdUsingPathVariable(@PathVariable Long id) {
+       
+        songRetriever.existsById(id);
+        songDeleter.deleteById(id);
         DeleteSongResponseDto body = SongMapper.mapFromSongToDeleteSongResponseDto(id);
         return ResponseEntity.ok(body);
     }
@@ -74,7 +74,7 @@ public class SongRestController {
     @PutMapping("/{id}")
     public ResponseEntity<UpdateSongResponseDto> update(@PathVariable Integer id,
                                                         @RequestBody @Valid UpdateSongRequestDto request) {
-        List<Song> allSongs = songRetreiver.findAll();
+        List<Song> allSongs = songRetriever.findAll();
         if (!allSongs.contains(id)) {
             throw new SongNotFoundException("Song with id " + id + " not found");
         }
@@ -88,7 +88,7 @@ public class SongRestController {
     @PatchMapping("/{id}")
     public ResponseEntity<PartiallyUpdateSongResponseDto> partiallyUpdateSong(@PathVariable Integer id,
                                                                               @RequestBody PartiallyUpdateSongRequestDto request) {
-        List<Song> allSongs = songRetreiver.findAll();
+        List<Song> allSongs = songRetriever.findAll();
         if (!allSongs.contains(id)) {
             throw new SongNotFoundException("Song with id " + id + " not found");
         }

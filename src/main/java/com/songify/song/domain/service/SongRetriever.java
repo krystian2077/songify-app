@@ -1,20 +1,27 @@
 package com.songify.song.domain.service;
 
 import com.songify.song.domain.model.Song;
+import com.songify.song.domain.model.SongNotFoundException;
 import com.songify.song.domain.repository.SongRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Log4j2
-public class SongRetreiver {
+public class SongRetriever {
 
     private final SongRepository songRepository;
 
-    SongRetreiver(SongRepository songRepository) {
+    SongRetriever(SongRepository songRepository) {
         this.songRepository = songRepository;
+    }
+
+    public void existsById(Long id) {
+        findSongById(id)
+                .orElseThrow(() -> new SongNotFoundException("Song with id: " + id + " does not exist."));
     }
 
     public List<Song> findAll() {
@@ -24,6 +31,10 @@ public class SongRetreiver {
 
     public List<Song> findAllLimitedBy(Integer limit) {
         return songRepository.findAll().stream().limit(limit).toList();
+    }
+
+    public Optional<Song> findSongById(Long id) {
+        return songRepository.findById(id);
     }
 }
 
