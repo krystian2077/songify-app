@@ -7,7 +7,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Log4j2
@@ -19,10 +18,6 @@ public class SongRetriever {
         this.songRepository = songRepository;
     }
 
-    public void existsById(Long id) {
-        findSongById(id)
-                .orElseThrow(() -> new SongNotFoundException("Song with id: " + id + " does not exist."));
-    }
 
     public List<Song> findAll() {
         log.info("retrieving all songs: ");
@@ -33,9 +28,17 @@ public class SongRetriever {
         return songRepository.findAll().stream().limit(limit).toList();
     }
 
-    public Optional<Song> findSongById(Long id) {
-        return songRepository.findById(id);
+    public Song findSongById(Long id) {
+        return songRepository.findById(id)
+                .orElseThrow(() -> new SongNotFoundException("Song with id: " + id + " does not exist."));
     }
+
+    public void existsById(Long id) {
+        if (!songRepository.existsById(id)) {
+            throw new SongNotFoundException("Song with id: " + id + " does not exist.");
+        }
+    }
+
 }
 
 
