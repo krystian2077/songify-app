@@ -1,5 +1,6 @@
 package com.songify.domain.crud.genre;
 
+import com.songify.domain.crud.util.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,7 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter(AccessLevel.PACKAGE)
 @Setter(AccessLevel.PACKAGE)
-class Genre {
+class Genre extends BaseEntity {
 
     @Id
     @GeneratedValue(generator = "genre_id_seq", strategy = GenerationType.SEQUENCE)
@@ -23,7 +24,7 @@ class Genre {
             sequenceName = "genre_id_seq",
             allocationSize = 1
     )
-    public Long id;
+    private Long id;
 
     private String name;
 }
