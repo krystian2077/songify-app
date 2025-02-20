@@ -1,4 +1,4 @@
-package com.songify.domain.crud.song;
+package com.songify.domain.crud;
 
 import com.songify.domain.crud.util.BaseEntity;
 import jakarta.persistence.Column;
@@ -8,6 +8,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,6 +40,9 @@ class Song extends BaseEntity {
     private Instant releaseDate;
 
     private Long duration;
+
+    @OneToOne
+    private Genre genre;
 
     @Enumerated(EnumType.STRING)
     private SongLanguage language;

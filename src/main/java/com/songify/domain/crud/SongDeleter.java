@@ -1,4 +1,4 @@
-package com.songify.domain.crud.song;
+package com.songify.domain.crud;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -13,7 +13,7 @@ class SongDeleter {
     private final SongRepository songRepository;
 
     void deleteById(Long id) {
-        log.info("deleting song by id: " + id);
+        log.info("deleting song by id: {}", id);
         songRepository.deleteById(id);
     }
 }

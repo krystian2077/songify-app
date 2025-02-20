@@ -1,4 +1,5 @@
-package com.songify.domain.crud.song;
+package com.songify.domain.crud;
+
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
