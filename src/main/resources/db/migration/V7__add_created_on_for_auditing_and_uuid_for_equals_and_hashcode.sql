@@ -15,3 +15,4 @@ ALTER TABLE genre
 
 ALTER TABLE genre
     ADD uuid UUID default uuid_generate_v4() NOT NULL UNIQUE;
+
