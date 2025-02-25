@@ -1,8 +1,13 @@
 package com.songify.domain.crud;
 
+import com.songify.domain.crud.dto.AlbumRequestDto;
 import com.songify.domain.crud.dto.ArtistDto;
 import com.songify.domain.crud.dto.ArtistRequestDto;
+import com.songify.domain.crud.dto.GenreDto;
+import com.songify.domain.crud.dto.GenreRequestDto;
 import com.songify.domain.crud.dto.SongDto;
+import com.songify.domain.crud.dto.SongRequestDto;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -11,6 +16,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class SongifyCrudFacade {
 
     private final SongRetriever songRetriever;
@@ -18,9 +24,23 @@ public class SongifyCrudFacade {
     private final SongDeleter songDeleter;
     private final SongAdder songAdder;
     private final ArtistAdder artistAdder;
+    private final GenreAdder genreAdder;
+    private final AlbumAdder albumAdder;
 
     public ArtistDto addArtist(ArtistRequestDto dto) {
         return artistAdder.addArtist(dto.name());
+    }
+
+    public AlbumDto addAlbumWithSong(AlbumRequestDto dto) {
+        return albumAdder.addAlbum(dto.songId(), dto.tittle(), dto.releaseDate());
+    }
+
+    public GenreDto addGenre(GenreRequestDto dto) {
+        return genreAdder.addGenre(dto.name());
+    }
+
+    public SongDto addSong(SongRequestDto dto) {
+        return songAdder.addSong(dto);
     }
 
     public List<SongDto> findAll(Pageable pageable) {
@@ -45,7 +65,7 @@ public class SongifyCrudFacade {
 
     public SongDto updatePartiallyById(Long id, SongDto songFromRequest) {
         songRetriever.existsById(id);
-        Song songFromDatabase = songRetriever.findSongDtoById(id);
+        Song songFromDatabase = songRetriever.findSongById(id);
         Song.SongBuilder builder = Song.builder();
         if (songFromRequest.name() != null) {
             builder.name(songFromRequest.name());
@@ -67,25 +87,13 @@ public class SongifyCrudFacade {
 
     }
 
-    public SongDto addSong(SongDto songDto) {
-        // some domain validator
-        String name = songDto.name();
-        Song vaidatedAndReadytoSaveSong = new Song(name);
-        // some domain validator ended checking
-        Song addedSong = songAdder.addSong(vaidatedAndReadytoSaveSong);
-        return SongDto.builder()
-                .id(addedSong.getId())
-                .name(addedSong.getName())
-                .build();
-    }
-
     public void deleteById(Long id) {
         songRetriever.existsById(id);
         songDeleter.deleteById(id);
     }
 
     public SongDto findSongDtoById(Long id) {
-        Song song = songRetriever.findSongDtoById(id);
+        Song song = songRetriever.findSongById(id);
         return SongDto.builder()
                 .id(song.getId())
                 .name(song.getName())

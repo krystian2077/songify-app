@@ -10,7 +10,7 @@ class ArtistAdder {
 
     private final ArtistRepository artistRepository;
 
-    ArtistDto addArtist(final String name) {
+    ArtistDto addArtist(String name) {
         Artist artist = new Artist(name);
         Artist save = artistRepository.save(artist);
         return new ArtistDto(save.getId(), save.getName());
