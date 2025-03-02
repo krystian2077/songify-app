@@ -8,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.SequenceGenerator;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,9 +17,9 @@ import java.util.Set;
 
 @Entity
 @NoArgsConstructor
-@Getter(AccessLevel.PACKAGE)
-@Setter(AccessLevel.PACKAGE)
-class Artist extends BaseEntity {
+@Getter
+@Setter
+public class Artist extends BaseEntity {
 
     @Id
     @GeneratedValue(generator = "artist_id_seq", strategy = GenerationType.SEQUENCE)

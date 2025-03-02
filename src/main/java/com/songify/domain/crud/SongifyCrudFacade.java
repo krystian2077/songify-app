@@ -13,10 +13,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
-@AllArgsConstructor
 @Transactional
+@AllArgsConstructor
 public class SongifyCrudFacade {
 
     private final SongRetriever songRetriever;
@@ -26,6 +27,7 @@ public class SongifyCrudFacade {
     private final ArtistAdder artistAdder;
     private final GenreAdder genreAdder;
     private final AlbumAdder albumAdder;
+    private final ArtistRetriever artistRetriever;
 
     public ArtistDto addArtist(ArtistRequestDto dto) {
         return artistAdder.addArtist(dto.name());
@@ -41,6 +43,10 @@ public class SongifyCrudFacade {
 
     public SongDto addSong(SongRequestDto dto) {
         return songAdder.addSong(dto);
+    }
+
+    public Set<ArtistDto> findAllArtists() {
+        return artistRetriever.findAllArtists();
     }
 
     public List<SongDto> findAll(Pageable pageable) {
