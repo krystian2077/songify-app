@@ -29,6 +29,7 @@ public class SongifyCrudFacade {
     private final AlbumAdder albumAdder;
     private final ArtistRetriever artistRetriever;
 
+
     public ArtistDto addArtist(ArtistRequestDto dto) {
         return artistAdder.addArtist(dto.name());
     }
@@ -45,21 +46,19 @@ public class SongifyCrudFacade {
         return songAdder.addSong(dto);
     }
 
-    public Set<ArtistDto> findAllArtists() {
-        return artistRetriever.findAllArtists();
+    public Set<ArtistDto> findAllArtists(Pageable pageable) {
+        return artistRetriever.findAllArtists(pageable);
     }
 
-    public List<SongDto> findAll(Pageable pageable) {
-        return songRetriever.findAll(pageable)
-                .stream()
-                .map(song -> SongDto.builder()
-                        .id(song.getId())
-                        .name(song.getName())
-                        .build())
-                .toList();
+    public List<SongDto> findAllSongs(Pageable pageable) {
+        return songRetriever.findAll(pageable);
     }
 
-    public void updateById(Long id, SongDto newSongDto) {
+    public SongDto findSongDtoById(Long id) {
+        return songRetriever.findSongDtoById(id);
+    }
+
+    public void updateSongById(Long id, SongDto newSongDto) {
         songRetriever.existsById(id);
         // some domain validator
         Song songValidatedAndReadyToUpdate = Song.builder()
@@ -69,7 +68,7 @@ public class SongifyCrudFacade {
         songUpdater.updateById(id, songValidatedAndReadyToUpdate);
     }
 
-    public SongDto updatePartiallyById(Long id, SongDto songFromRequest) {
+    public SongDto updateSongPartiallyById(Long id, SongDto songFromRequest) {
         songRetriever.existsById(id);
         Song songFromDatabase = songRetriever.findSongById(id);
         Song.SongBuilder builder = Song.builder();
@@ -93,16 +92,9 @@ public class SongifyCrudFacade {
 
     }
 
-    public void deleteById(Long id) {
+    public void deleteSongById(Long id) {
         songRetriever.existsById(id);
         songDeleter.deleteById(id);
     }
 
-    public SongDto findSongDtoById(Long id) {
-        Song song = songRetriever.findSongById(id);
-        return SongDto.builder()
-                .id(song.getId())
-                .name(song.getName())
-                .build();
-    }
 }
