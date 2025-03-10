@@ -1,3 +1,21 @@
 INSERT INTO genre (name)
 VALUES ('Rock'),
-       ('Pop');
+       ('Pop'),
+       ('Jazz'),
+       ('Classical'),
+       ('Hip Hop'),
+       ('Electronic'),
+       ('Reggae'),
+       ('Blues'),
+       ('Country'),
+       ('Metal'),
+       ('Folk'),
+       ('Soul'),
+       ('Punk'),
+       ('Disco'),
+       ('Funk'),
+       ('R&B'),
+       ('Gospel'),
+       ('Latin'),
+       ('Opera'),
+       ('Techno');

@@ -1,6 +1,6 @@
 package com.songify.domain.crud;
 
-enum SongLanguage {
+public enum SongLanguage {
     ENGLISH,
     SPANISH,
     POLISH,
