@@ -21,4 +21,8 @@ class AlbumRetriever {
         return albumRepository.findAllAlbumsByArtistId(artistId);
     }
 
+    Album findById(Long albumId) {
+        return albumRepository.findById(albumId)
+                .orElseThrow(() -> new AlbumNotFoundException("Album with id " + albumId + " not found"));
+    }
 }
