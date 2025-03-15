@@ -35,7 +35,6 @@ public class SongifyCrudFacade {
     private final ArtistAssigner artistAssigner;
     private final ArtistUpdater artistUpdater;
 
-
     public void deleteArtistByIdWithAlbumsAndSongs(Long artistId) {
         artistDeleter.deleteArtistByIdWithAlbumsAndSongs(artistId);
     }
@@ -50,6 +49,10 @@ public class SongifyCrudFacade {
 
     public void addArtistToAlbum(Long artistId, Long albumId) {
         artistAssigner.addArtistToAlbum(artistId, albumId);
+    }
+
+    public ArtistDto addArtistWithDefaultAlbumAndSong(ArtistRequestDto dto) {
+        return artistAdder.addArtistWithDefaultAlbumAndSong(dto);
     }
 
     public ArtistDto updateArtistNameById(Long artistId, String name) {
@@ -82,11 +85,9 @@ public class SongifyCrudFacade {
 
     public void updateSongById(Long id, SongDto newSongDto) {
         songRetriever.existsById(id);
-        // some domain validator
         Song songValidatedAndReadyToUpdate = Song.builder()
                 .name(newSongDto.name())
                 .build();
-        // some domain validator ended checking
         songUpdater.updateById(id, songValidatedAndReadyToUpdate);
     }
 

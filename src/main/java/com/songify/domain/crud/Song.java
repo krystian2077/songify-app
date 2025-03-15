@@ -26,7 +26,7 @@ import java.time.Instant;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Song extends BaseEntity {
+class Song extends BaseEntity {
 
     @Id
     @GeneratedValue(generator = "song_id_seq", strategy = GenerationType.SEQUENCE)

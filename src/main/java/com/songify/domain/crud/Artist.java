@@ -1,6 +1,7 @@
 package com.songify.domain.crud;
 
 import com.songify.domain.crud.util.BaseEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,7 +20,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Artist extends BaseEntity {
+class Artist extends BaseEntity {
 
     @Id
     @GeneratedValue(generator = "artist_id_seq", strategy = GenerationType.SEQUENCE)
@@ -33,7 +34,7 @@ public class Artist extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Set<Album> albums = new HashSet<>();
 
     Artist(final String name) {
