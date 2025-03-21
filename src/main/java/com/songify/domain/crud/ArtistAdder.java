@@ -17,8 +17,7 @@ class ArtistAdder {
     private final AlbumAdder albumAdder;
 
     ArtistDto addArtist(String name) {
-        Artist artist = new Artist(name);
-        Artist save = artistRepository.save(artist);
+        Artist save = saveArtist(name);
         return new ArtistDto(save.getId(), save.getName());
     }
 

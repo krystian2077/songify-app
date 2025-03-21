@@ -11,9 +11,12 @@ import java.util.Optional;
 import java.util.Set;
 
 interface AlbumRepository extends Repository<Album, Long> {
+
     Album save(Album album);
 
     Optional<Album> findById(Long id);
+
+    Set<Album> findAll();
 
     @Query("""
             select a from Album a
