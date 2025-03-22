@@ -16,7 +16,7 @@ class InMemorySongRepository implements SongRepository {
 
     @Override
     public List<Song> findAll(Pageable pageable) {
-        return List.of();
+        return db.values().stream().toList();
     }
 
     @Override

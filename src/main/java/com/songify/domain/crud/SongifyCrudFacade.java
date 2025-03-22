@@ -1,14 +1,6 @@
 package com.songify.domain.crud;
 
-import com.songify.domain.crud.dto.AlbumDto;
-import com.songify.domain.crud.dto.AlbumInfo;
-import com.songify.domain.crud.dto.AlbumRequestDto;
-import com.songify.domain.crud.dto.ArtistDto;
-import com.songify.domain.crud.dto.ArtistRequestDto;
-import com.songify.domain.crud.dto.GenreDto;
-import com.songify.domain.crud.dto.GenreRequestDto;
-import com.songify.domain.crud.dto.SongDto;
-import com.songify.domain.crud.dto.SongRequestDto;
+import com.songify.domain.crud.dto.*;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -130,5 +122,9 @@ public class SongifyCrudFacade {
 
     AlbumDto findAlbumById(Long albumId) {
         return albumRetriever.findDtoById(albumId);
+    }
+
+    public Set<AlbumDto> finfAllAlbums() {
+        return albumRetriever.findAll();
     }
 }

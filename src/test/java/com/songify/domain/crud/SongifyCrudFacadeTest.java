@@ -1,6 +1,7 @@
 package com.songify.domain.crud;
 
 import com.songify.domain.crud.dto.AlbumDto;
+import com.songify.domain.crud.dto.AlbumInfo;
 import com.songify.domain.crud.dto.AlbumRequestDto;
 import com.songify.domain.crud.dto.ArtistDto;
 import com.songify.domain.crud.dto.ArtistRequestDto;
@@ -139,22 +140,51 @@ class SongifyCrudFacadeTest {
 //                .size()).isGreaterThanOrEqualTo(2);
     }
 
+
     @Test
+    public void should_add_album_with_song() {
+        // given
+        SongRequestDto songRequestDto = SongRequestDto.builder()
+                .name("song1")
+                .language(SongLanguageDto.ENGLISH)
+                .build();
+        SongDto songDto = songifyCrudFacade.addSong(songRequestDto);
+
+        AlbumRequestDto album = AlbumRequestDto
+                .builder()
+                .songId(songDto.id())
+                .tittle("album tittle 1")
+                .build();
+        assertThat(songifyCrudFacade.finfAllAlbums()).isEmpty();
+
+        // when
+        AlbumDto albumDto = songifyCrudFacade.addAlbumWithSong(album);
+
+        // then
+        assertThat(songifyCrudFacade.finfAllAlbums()).isNotEmpty();
+        AlbumInfo albumWithSongs = songifyCrudFacade.findAlbumByIdWithArtistsAndSongs(albumDto.id());
+        Set<AlbumInfo.SongInfo> songs = albumWithSongs.getSongs();
+        assertTrue(songs.stream().anyMatch(song -> song.getId().equals(songDto.id())));
+
+    }
+
+    @Test
+    @DisplayName("should add song")
     public void should_add_song() {
         // given
         SongRequestDto song = SongRequestDto.builder()
                 .name("song1")
                 .language(SongLanguageDto.ENGLISH)
                 .build();
+        assertThat(songifyCrudFacade.findAllSongs(Pageable.unpaged())).isEmpty();
+
         // when
         SongDto songDto = songifyCrudFacade.addSong(song);
-        Long songId = songDto.id();
-        // then
-    }
 
-    @Test
-    public void should_add_album_with_song() {
-        //TODO
+        // then
+        assertThat(songifyCrudFacade.findAllSongs(Pageable.unpaged()))
+                .extracting(SongDto::id)
+                .containsExactly(songDto.id());
     }
 
     @Test
