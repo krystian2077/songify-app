@@ -1,6 +1,14 @@
 package com.songify.domain.crud;
 
-import com.songify.domain.crud.dto.*;
+import com.songify.domain.crud.dto.AlbumDto;
+import com.songify.domain.crud.dto.AlbumInfo;
+import com.songify.domain.crud.dto.AlbumRequestDto;
+import com.songify.domain.crud.dto.ArtistDto;
+import com.songify.domain.crud.dto.ArtistRequestDto;
+import com.songify.domain.crud.dto.GenreDto;
+import com.songify.domain.crud.dto.GenreRequestDto;
+import com.songify.domain.crud.dto.SongDto;
+import com.songify.domain.crud.dto.SongRequestDto;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +44,7 @@ public class SongifyCrudFacade {
     }
 
     public AlbumDto addAlbumWithSong(AlbumRequestDto dto) {
-        return albumAdder.addAlbum(dto.songId(), dto.tittle(), dto.releaseDate());
+        return albumAdder.addAlbum(dto.songIds(), dto.tittle(), dto.releaseDate());
     }
 
     public void addArtistToAlbum(Long artistId, Long albumId) {
