@@ -52,10 +52,10 @@ class ArtistController {
         return ResponseEntity.ok("Deleted artist with id " + artistId);
     }
 
-    @PutMapping("/{artistId}/{albumId}")
+    @PutMapping("/{artistId}/albums/{albumId}")
     ResponseEntity<String> addArtistToAlbum(@PathVariable Long artistId, @PathVariable Long albumId) {
         songifyCrudFacade.addArtistToAlbum(artistId, albumId);
-        return ResponseEntity.ok("Added artist with id " + artistId + " to album with id " + albumId);
+        return ResponseEntity.ok("probably assigned artist to album");
     }
 
     @PatchMapping({"/{artistId}"})

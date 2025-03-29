@@ -346,7 +346,24 @@ class SongifyCrudFacadeTest {
 
         // then
         assertThat(albumById)
-                .isEqualTo(
-                        new AlbumDto(albumId, "album tittle 1"));
+                .isEqualTo(new AlbumDto(albumId, "album tittle 1", Set.of(songDto.id())));
+    }
+
+    @Test
+    @DisplayName("should retrieve song with genre")
+    public void should_retrieve_song() {
+        // given
+        SongRequestDto song = SongRequestDto.builder()
+                .name("song1")
+                .language(SongLanguageDto.ENGLISH)
+                .build();
+        SongDto songDto = songifyCrudFacade.addSong(song);
+        // when
+        SongDto songDtoById = songifyCrudFacade.findSongDtoById(songDto.id());
+        // then
+        assertThat(songDtoById.genre().name()).isEqualTo("default");
+        assertThat(songDtoById.genre().id()).isEqualTo(1);
+        assertThat(songDtoById.id()).isEqualTo(0);
+        assertThat(songDtoById.name()).isEqualTo("song1");
     }
 }
