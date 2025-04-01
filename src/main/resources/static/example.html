@@ -1,0 +1,45 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Login</title>
+</head>
+<body>
+<div>
+    <h2>Login</h2>
+    <form action="/login" id="loginForm" method="post" onsubmit="return validateForm()">
+        <div>
+            <label for="username">Username:</label>
+            <input id="username" name="username" required type="text">
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input id="password" name="password" required type="password">
+        </div>
+        <div>
+            <button type="submit">Login</button>
+        </div>
+        <div id="error-message" style="color:red;"></div>
+    </form>
+</div>
+<script>
+    function validateForm() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const errorMessage = document.getElementById('error-message');
+
+        if (username === "" || password === "") {
+            errorMessage.textContent = "Both username and password are required.";
+            return false;
+        }
+
+        // Clear error message
+        errorMessage.textContent = "";
+
+        // Form is valid, allow submission
+        return true;
+    }
+</script>
+</body>
+</html>
