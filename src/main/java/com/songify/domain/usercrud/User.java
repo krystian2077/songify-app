@@ -2,7 +2,6 @@ package com.songify.domain.usercrud;
 
 import com.songify.domain.crud.util.BaseEntity;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +20,7 @@ import java.util.HashSet;
 @Getter
 @Setter
 @NoArgsConstructor
-class User extends BaseEntity {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(generator = "users_id_seq", strategy = GenerationType.SEQUENCE)
@@ -39,7 +38,6 @@ class User extends BaseEntity {
 
     private boolean enabled = true;
 
-    @ElementCollection
     private Collection<String> authorities = new HashSet<>();
 
     public User(String email, String password, boolean enabled, Collection<String> authorities) {
